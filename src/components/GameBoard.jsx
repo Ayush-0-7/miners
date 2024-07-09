@@ -12,7 +12,7 @@ const GameBoard = () => {
     const randombomb = useSelector(state=>state.randombomb);
 
     const count = useSelector(state=>state.gamecount)
-
+    const start = useSelector(state=>state.start);
     const multipliers = useSelector(state=>state.multiplier);
     const [isportalopen,setisportalopen] = useState(false);
     const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const GameBoard = () => {
     
     const win = () => {
       let song = new Audio('https://www.myinstants.com/media/sounds/subway-surfers-coin-collect.mp3'); // Corrected URL
-      song.play().catch(error => {
+      if(start == true)song.play().catch(error => {
           console.error("Error playing audio:", error);
       });
         bombs==5 ? dispatch(changeMultiplier({multiplier:multipliers+0.005})):bombs==8 ? dispatch(changeMultiplier({multiplier:multipliers+0.004})):bombs==11 ? dispatch(changeMultiplier({multiplier:multipliers+0.06})):bombs==12 ? dispatch(changeMultiplier({multiplier:multipliers+0.1})):bombs==15 ? dispatch(changeMultiplier({multiplier:multipliers+0.2})):bombs==16 ? dispatch(changeMultiplier({multiplier:multipliers+0.25})):bombs==18 ? dispatch(changeMultiplier({multiplier:multipliers+0.5})):bombs==22 ? dispatch(changeMultiplier({multiplier:multipliers+2.5})):null;
@@ -45,8 +45,8 @@ const GameBoard = () => {
     const handleclick = (e) => {
         let explode = new Audio('https://www.soundjay.com/mechanical/sounds/explosion-01.mp3');
         const temp= e.target.parentElement.parentElement;
-        temp.className='opacity-100 pointer-events-none';
-        randomBomb.includes(parseInt(temp.id)) ? explode.play().catch((err)=>console.log('error playing')) && dispatch(changeAmount({amount:0})) && dispatch(isportal({isportal:true})) && dispatch(changebalance({balance:balance+0})): win();
+        if(start == true)temp.className='opacity-100 pointer-events-none';
+        if(start == true)randomBomb.includes(parseInt(temp.id)) ? explode.play().catch((err)=>console.log('error playing')) && dispatch(changeAmount({amount:0})) && dispatch(isportal({isportal:true})) && dispatch(changebalance({balance:balance+0})): win();
     }
     
 

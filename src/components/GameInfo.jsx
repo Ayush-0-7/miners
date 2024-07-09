@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { changeAmount, changebalance, changeBomb, changegamecount, changeinvestedAmount, isportal } from '../features/miners/MinerSlice';
+import { changeAmount, changebalance, changeBomb, changegamecount, changeinvestedAmount, changestart, isportal } from '../features/miners/MinerSlice';
 import { FaPlus } from "react-icons/fa6";
 import { TiMinus } from "react-icons/ti";
 import Modal from './Modal';
@@ -16,10 +16,10 @@ const GameInfo = () => {
   const balances = useSelector(state => state.balance);
   const count = useSelector(state=>state.gamecount)
   const [invest,setinvest] = useState(0);
-  const [start,setstart] = useState(false);
+  const start = useSelector(state => state.start);
   
   const handleclick = () => {
-    setstart(true);
+    dispatch(changestart({start:true}));
     dispatch(changegamecount({count:count+1}));
     console.log(parseInt(bombs.current.value));
     dispatch(changeBomb({bombs:parseInt(bombs.current.value)}));
@@ -35,7 +35,7 @@ const GameInfo = () => {
 
   }
   const handleclick2 = () => {
-     setstart(false);
+    dispatch(changestart({start:false}));
      dispatch(isportal({isportal:true}))
      const bal = balances+amount; 
      dispatch(changebalance({balance:bal}));
@@ -47,7 +47,7 @@ const GameInfo = () => {
        <p className='font-serif font-bold text-4xl underline'>Money Invested:</p>
        <p className='text-2xl font-bold flex justify-center '>
         <div className='bg-blue-700 flex text-4xl'>
-        <TiMinus className='m-3 text-2xl' onClick={()=>setinvest(invest-50)}/> {"   "}{invest}{"   "} <FaPlus className='m-3 text-2xl' onClick={()=>setinvest(invest+50)}/>
+        <TiMinus className='m-3 text-2xl' onClick={()=>invest>0?setinvest(invest-50):null}/> {"   "}{invest}{"   "} <FaPlus className='m-3 text-2xl' onClick={()=>setinvest(invest+50)}/>
         </div>
 
        </p>
