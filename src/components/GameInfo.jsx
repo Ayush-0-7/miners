@@ -92,6 +92,7 @@ const GameInfo = () => {
 <button
   type="button"
   className="inline-flex items-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-300" onClick={handleclick2}
+  disabled={!start}
 >
   Withdraw
   <svg
