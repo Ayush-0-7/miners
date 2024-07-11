@@ -7,8 +7,8 @@ const paymentStatus = async(req,response) => {
         method:'GET',
         url:`https://sandbox.cashfree.com/pg/orders/${orderId}`,
         headers:{
-            "x-client-id":"TEST10246360134f563e0152a9f48ea406364201",
-            "x-client-secret":"cfsk_ma_test_0a2b0b8a30ba9784204b9547d9a7c0c1_a8e157ad",
+            "x-client-id":process.env.ID,
+            "x-client-secret":process.env.SECRET,
             "x-api-version":"2023-08-01",
             accept:"application/json",
            
