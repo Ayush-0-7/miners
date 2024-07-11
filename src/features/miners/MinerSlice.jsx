@@ -7,7 +7,9 @@ const initialState={
    balance:localStorage.getItem("balances"),
    gamecount:0,
    investedAmount:0,
-   start:false
+   start:false,
+   psi:"",
+   oid:""
 }
 const Miners = createSlice({
     name:"miners",
@@ -40,9 +42,14 @@ const Miners = createSlice({
         },
         changestart:(state,action) => {
             state.start = action.payload.start;
+        },
+        changepayment:(state,action) => {
+            state.psi = action.payload.psi,
+            state.oid = action.payload.oid
+
         }
 
     }
 })
-export const {changeBomb , changeAmount ,changegamecount, isportal , changebalance , changeMultiplier , changeinvestedAmount , changestart } = Miners.actions
+export const {changeBomb , changeAmount ,changegamecount, isportal , changebalance , changeMultiplier , changeinvestedAmount , changestart ,changepayment} = Miners.actions
 export default Miners.reducer;
