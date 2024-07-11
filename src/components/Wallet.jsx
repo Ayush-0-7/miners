@@ -4,6 +4,8 @@ import { redirect, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { changebalance, changepayment } from '../features/miners/MinerSlice';
 import { cashfree } from './util';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Wallet = () => {
     const dispatch = useDispatch();
@@ -15,6 +17,7 @@ const Wallet = () => {
     const topup = useRef();
     const navigate = useNavigate();
     const handlepayment = async() => {
+      if(topup.current.value == false) return toast("Please Enter a valid amount.")
       await fetch('http://localhost:5000/api/order',{
         method:'POST',
         headers:{
@@ -77,11 +80,20 @@ const Wallet = () => {
           "Content-Type":"application/json"
         }
       }).then(async(res)=>{
-        const data = await res.json();
+        let data = await res.json();
         console.log(data.order_data);
         const total_balance = parseInt(balance) + data.order_data.order_amount;
-        dispatch(changebalance({balance:total_balance}));
-        localStorage.setItem('balances',total_balance);
+        if(data.order_data.order_status=='PAID'){
+          dispatch(changebalance({balance:total_balance}));
+          localStorage.setItem('balances',total_balance);
+          toast("Payment is successful");
+         
+          
+        }
+        else if (data.order_data.order_status=='ACTIVE'){
+          toast("Oops!! Payment failed.");
+          
+        }
         localStorage.setItem('oid',"");
       }).catch((error)=>{
         console.log(error);
@@ -90,6 +102,7 @@ const Wallet = () => {
     }
   return (
     <div className='flex justify-center items-center h-[100vh] w-[100vw] bg-white'>
+     <ToastContainer/>
      <div className='md:h-[35vh] md:w-[30vw] h-[50vh] w-full bg-black text-white rounded-md text-left font-serif p-3'>
      <h1 className='text-center font-extrabold text-3xl underline'>My Wallet</h1>
      <h2 className='p-2'><span className='font-bold'>Account Holder's Name</span> :Ayush</h2><hr className='border-1 border-white'></hr>
