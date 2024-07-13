@@ -1,4 +1,9 @@
+// cashfreeLoader.js
 import {load} from '@cashfreepayments/cashfree-js';
-export const cashfree = await load({
-	mode: "sandbox" //or production
-});
+
+export async function loadCashfree() {
+    const cashfree = await load({
+        mode: "sandbox" //or production
+    });
+    return cashfree;
+}

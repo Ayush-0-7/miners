@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { redirect, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { changebalance, changepayment } from '../features/miners/MinerSlice';
-import { cashfree } from './util';
+import { loadCashfree } from './util';
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -31,8 +32,9 @@ const Wallet = () => {
         dispatch(changepayment({psi:data1.psi,oid:data1.order_id}));
         return data1.psi;
       })
-      .then((res)=>{
-
+      .then(async(res)=>{
+       
+      const cashfree = await loadCashfree();
       
       let checkoutOptions = {
         paymentSessionId:res,
