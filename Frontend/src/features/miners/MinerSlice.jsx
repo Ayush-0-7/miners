@@ -4,7 +4,7 @@ const initialState={
    amount:0,
    multiplier:1.02,
    portal:false,
-   balance:localStorage.getItem('balances') ?localStorage.getItem('balances'):0,
+   balance:isNaN(localStorage.getItem('balances')) ? 0 : parseFloat(localStorage.getItem('balances')),
    gamecount:0,
    investedAmount:0,
    start:false,
