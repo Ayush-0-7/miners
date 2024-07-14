@@ -110,7 +110,7 @@ const Wallet = () => {
      <div className='md:h-[35vh] md:w-[30vw] h-[50vh] w-full bg-black text-white rounded-md text-left font-serif p-3'>
      <h1 className='text-center font-extrabold text-3xl underline'>My Wallet</h1>
      <h2 className='p-2'><span className='font-bold'>Account Holder's Name</span> :Ayush</h2><hr className='border-1 border-white'></hr>
-     <h2 className='p-2'><span className='font-bold'>Balance</span> : {balance}</h2> <hr className='border-1 border-white'></hr>
+     <h2 className='p-2'><span className='font-bold'>Balance</span> : {localStorage.getItem("balances")?localStorage.getItem("balances"):balance}</h2> <hr className='border-1 border-white'></hr>
      {/*  */}
      <div className='flex'>
      <Link
