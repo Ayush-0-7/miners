@@ -1,0 +1,1 @@
+export const baseurl = `https://miners-backend.vercel.app`;

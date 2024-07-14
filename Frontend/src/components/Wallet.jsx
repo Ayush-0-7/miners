@@ -7,6 +7,7 @@ import { loadCashfree } from './util';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { baseurl } from '../urls';
 
 const Wallet = () => {
     const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const Wallet = () => {
     const navigate = useNavigate();
     const handlepayment = async() => {
       if(topup.current.value == false) return toast("Please Enter a valid amount.")
-      await fetch('http://localhost:5000/api/order',{
+      await fetch(`${baseurl}/api/order`,{
         method:'POST',
         headers:{
           "Content-Type":"application/json"
@@ -57,7 +58,7 @@ const Wallet = () => {
      })
      /*.then(async()=>{
      
-     await fetch('http://localhost:5000/api/paymentStatus',{
+     await fetch(`${baseurl}/api/paymentStatus`,{
       method:'POST',
       headers:{
         "Content-Type":"application/json"
@@ -76,7 +77,7 @@ const Wallet = () => {
     }
     const handlevalidate = async() => {
       const oid = localStorage.getItem('oid');
-      await fetch(`http://localhost:5000/api/paymentStatus/${oid}`,{
+      await fetch(`${baseurl}/api/paymentStatus/${oid}`,{
         method:'GET',
         headers:{
           "Content-Type":"application/json"
