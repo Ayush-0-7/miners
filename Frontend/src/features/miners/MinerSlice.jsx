@@ -4,7 +4,7 @@ const initialState={
    amount:0,
    multiplier:1.02,
    portal:false,
-   balance:parseInt(localStorage.getItem('balances')),
+   balance:1,
    gamecount:0,
    investedAmount:0,
    start:false,
