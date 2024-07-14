@@ -1,1 +1,1 @@
-export const baseurl = `https://miners-backend.vercel.app`;
+export const baseurl =`http://localhost:5000`;
