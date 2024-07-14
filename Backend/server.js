@@ -4,7 +4,7 @@ const app = express();
 const PORT = process.env.PORT ;
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const router = require('./Routes/orderRoute');
+const router = require('./api/orderRoute');
 app.use(cors());
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
