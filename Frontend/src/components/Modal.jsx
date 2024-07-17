@@ -3,16 +3,13 @@ import { createPortal } from 'react-dom'
 import './Modal.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { IoCloseCircle } from "react-icons/io5";
-import { changebalance, isportal } from '../features/miners/MinerSlice';
+import {isportal } from '../features/miners/MinerSlice';
 const Modal = () => {
   const amount = useSelector(state=>state.amount)
   const bombs = useSelector(state=>state.bombs)
   const dispatch = useDispatch();
-  const balance = useSelector(state=>state.balance);
   const invest = useSelector(state=>state.investedAmount)
   const handleclick = async() => {
-    localStorage.setItem("balances",balance);
-    console.log(balance);
     window.location.reload();
   }
 

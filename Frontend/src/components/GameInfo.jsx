@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { changeAmount, changebalance, changeBomb, changegamecount, changeinvestedAmount, changestart, isportal } from '../features/miners/MinerSlice';
+import { changeAmount, changeBomb, changegamecount, changeinvestedAmount, changestart, isportal } from '../features/miners/MinerSlice';
 import { FaPlus } from "react-icons/fa6";
 import { TiMinus } from "react-icons/ti";
 import Modal from './Modal';
@@ -13,7 +13,7 @@ const GameInfo = () => {
   const bombs = useRef();
   const amount = useSelector(state => state.amount);
   const mul = useSelector(state => state.multiplier);
-  const balances = useSelector(state => state.balance);
+
   const count = useSelector(state=>state.gamecount)
   const [invest,setinvest] = useState(0);
   const start = useSelector(state => state.start);
@@ -26,7 +26,8 @@ const GameInfo = () => {
     if(invest>0 && invest<=balances){
       dispatch(changeinvestedAmount({invest}));
       dispatch(changeAmount({amount:(invest)}));
-      dispatch(changebalance({balance:balances-invest}));
+      const newbalance = localStorage.getItem('balances')-invest;
+      localStorage.setItem('balances',newbalance);
 
     }
      else if(invest<=0){ toast("Enter a VALID Amount.");}
@@ -37,8 +38,8 @@ const GameInfo = () => {
   const handleclick2 = () => {
     dispatch(changestart({start:false}));
      dispatch(isportal({isportal:true}))
-     const bal = balances+amount; 
-     dispatch(changebalance({balance:bal}));
+     const bal = localStorage.getItem('balances')+amount; 
+     localStorage.setItem('balances',bal);
   }
 
   return (

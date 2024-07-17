@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { redirect, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
-import { changebalance, changepayment } from '../features/miners/MinerSlice';
+import { changepayment } from '../features/miners/MinerSlice';
 import { loadCashfree } from './util';
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,11 +13,9 @@ const Wallet = () => {
     const dispatch = useDispatch();
     const psi = useSelector(state=>state.psi)
     const oid = useSelector(state=>state.oid)
-
-    const balance = useSelector(state=>state.balance);
-    const [bal,setbal] = useState(balance);
     const topup = useRef();
     const navigate = useNavigate();
+   
     const handlepayment = async() => {
       if(topup.current.value == false) return toast("Please Enter a valid amount.")
       await fetch(`${baseurl}/api/order`,{
@@ -84,10 +82,11 @@ const Wallet = () => {
         }
       }).then(async(res)=>{
         let data = await res.json();
-        console.log(data.order_data);
-        const total_balance = parseInt(balance) + data.order_data.order_amount;
+        return data;
+      }).then((res)=>{ 
+        const total_balance = localStorage.getItem('balances') + res.order_data.order_amount;
         if(data.order_data.order_status=='PAID'){
-          dispatch(changebalance({balance:total_balance}));
+          
           localStorage.setItem('balances',total_balance);
           console.log(total_balance);
           toast("Payment is successful");
@@ -110,7 +109,7 @@ const Wallet = () => {
      <div className='md:h-[35vh] md:w-[30vw] h-[50vh] w-full bg-black text-white rounded-md text-left font-serif p-3'>
      <h1 className='text-center font-extrabold text-3xl underline'>My Wallet</h1>
      <h2 className='p-2'><span className='font-bold'>Account Holder's Name</span> :Ayush</h2><hr className='border-1 border-white'></hr>
-     <h2 className='p-2'><span className='font-bold'>Balance</span> : {localStorage.getItem("balances")?localStorage.getItem("balances"):balance}</h2> <hr className='border-1 border-white'></hr>
+     <h2 className='p-2'><span className='font-bold'>Balance</span> : {localStorage.getItem('balances')?localStorage.getItem('balances'):0}</h2> <hr className='border-1 border-white'></hr>
      {/*  */}
      <div className='flex'>
      <Link
