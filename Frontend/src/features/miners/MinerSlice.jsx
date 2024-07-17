@@ -4,6 +4,7 @@ const initialState={
    amount:0,
    multiplier:1.02,
    portal:false,
+   balance:isNaN(localStorage.getItem('balances')) ? 0 : parseFloat(localStorage.getItem('balances')),
    gamecount:0,
    investedAmount:0,
    start:false,
@@ -28,7 +29,11 @@ const Miners = createSlice({
         isportal:(state,action)=>{
             state.portal = action.payload.isportal;
         },
+        changebalance:(state,action)=>{
+            const bal = action.payload.balance;
 
+            state.balance = bal ;
+        },
         changegamecount: (state,action) => {
             state.gamecount = action.payload.count
         },
@@ -46,5 +51,5 @@ const Miners = createSlice({
 
     }
 })
-export const {changeBomb , changeAmount ,changegamecount, isportal  , changeMultiplier , changeinvestedAmount , changestart ,changepayment} = Miners.actions
+export const {changeBomb , changeAmount ,changegamecount, isportal , changebalance , changeMultiplier , changeinvestedAmount , changestart ,changepayment} = Miners.actions
 export default Miners.reducer;
