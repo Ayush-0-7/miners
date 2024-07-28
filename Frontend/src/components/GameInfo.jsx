@@ -113,7 +113,7 @@ const GameInfo = () => {
 </button>
 
        <p className='font-serif text-2xl mt-32 text-left font-semibold p-2'>Multiplier: {mul.toFixed(3) || 1} X</p>
-       <p className='font-serif text-2xl mt-4 text-left font-semibold p-2'>Amount:  $ {(amount).toFixed(3)} </p>
+       <p className='font-serif text-2xl mt-4 text-left font-semibold p-2'>Amount:  ₹ {(amount).toFixed(3)} </p>
        {
         portals ? <Modal/>:null
        }
