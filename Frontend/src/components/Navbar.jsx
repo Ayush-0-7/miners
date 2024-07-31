@@ -34,7 +34,7 @@ const Navbar = () => {
               <Link to='/' className="text-sm font-semibold text-gray-800 hover:text-gray-900">Home</Link>
             </li>
             <li>
-              <Link to='/about' className="text-sm font-semibold text-gray-800 hover:text-gray-900">About</Link>
+              <Link to='/' className="text-sm font-semibold text-gray-800 hover:text-gray-900">About</Link>
             </li>
             <li>
               <button className="text-sm font-semibold text-gray-800 hover:text-gray-900" onClick={handlelogout}>LogOut</button>
@@ -71,13 +71,13 @@ const Navbar = () => {
         <div className="lg:hidden px-4 pb-4">
           <ul className="space-y-4">
             <li>
-              <Link to='/' className="block text-sm font-semibold text-gray-800 hover:text-gray-900">Home</Link>
+              <Link to='/home' className="block text-sm font-semibold text-gray-800 hover:text-gray-900">Home</Link>
             </li>
             <li>
-              <Link to='/about' className="block text-sm font-semibold text-gray-800 hover:text-gray-900">About</Link>
+              <Link to='/' className="block text-sm font-semibold text-gray-800 hover:text-gray-900">About</Link>
             </li>
             <li>
-              <Link to='/contact' className="block text-sm font-semibold text-gray-800 hover:text-gray-900">Contact</Link>
+              <Link to='/' className="block text-sm font-semibold text-gray-800 hover:text-gray-900" onClick={handlelogout}>Logout</Link>
             </li>
             <li>
               <Link to='/wallet' className="block text-sm font-semibold text-gray-800 hover:text-gray-900">Wallet</Link>

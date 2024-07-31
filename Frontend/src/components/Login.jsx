@@ -5,6 +5,7 @@ import { auth, db } from './Firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth/cordova';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore/lite';
+import img from '../images/hmb.png'
 const Login = () => {
     const navigate = useNavigate();
     const [user1,setuser1] = useState();
@@ -176,8 +177,8 @@ const Login = () => {
       </div>
       <div className="h-full w-full">
         <img
-          className="mx-auto h-full w-full rounded-md object-cover"
-          src="https://images.unsplash.com/photo-1630673245362-f69d2b93880e?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1740&amp;q=80"
+          className="mx-auto h-full w-full rounded-md object-cover bg-white"
+          src={img}
           alt=""
         />
       </div>

@@ -17,9 +17,11 @@ const Wallet = () => {
   const [bal, setbal] = useState(0);
   const topup = useRef();
   const navigate = useNavigate();
-
   useEffect(() => {
     auth.onAuthStateChanged((user)=>{
+      if(!user){
+        navigate('/');
+      }
       try {
         const docRef = async() => {
           const balancedoc = await getDoc(doc(db,'balance',user.uid));
