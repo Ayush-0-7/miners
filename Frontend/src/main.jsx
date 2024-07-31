@@ -13,15 +13,10 @@ import Login from './components/Login.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout/>}>
-      <Route path='' element={<Login/>}/>
+      <Route path='/' element={<Login/>}/>
       <Route path='/home' element={<App/>}/>
       <Route path='/wallet' element={<Wallet/>}/>
       <Route path='/signup' element={<SignUp/>}/>
-      <Route path='/login' element={<Login/>}/>
-
-
-
-
     </Route>
   )
 )

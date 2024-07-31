@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaWallet } from "react-icons/fa";
 import { GiWarPick } from "react-icons/gi";
 import { auth } from './Firebase';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const navigate = useNavigate();
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
   const handlelogout = async() => {
     try {
       await auth.signOut();
-      navigate('/signup');
+      navigate('/');
       console.log("User Logged Out sucessfully.");
     } catch (error) {
-      console.log("Logout Failed !!");
+      console.log(error);
     }
   }
   return (
