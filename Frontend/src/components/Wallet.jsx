@@ -58,7 +58,7 @@ const Wallet = () => {
 
       let checkoutOptions = {
         paymentSessionId: data1.psi,
-        returnUrl: "http://localhost:5173/wallet",
+        returnUrl: "miners-frontgg67.vercel.app/wallet",
       };
 
       cashfree.checkout(checkoutOptions).then((result) => {
