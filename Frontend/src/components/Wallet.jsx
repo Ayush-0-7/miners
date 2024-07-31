@@ -1,121 +1,122 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { redirect, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { changebalance, changepayment } from "../features/miners/MinerSlice";
+import { changepayment } from "../features/miners/MinerSlice";
 import { loadCashfree } from "./util";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { baseurl } from "../urls";
+import { doc, getDoc, setDoc } from "firebase/firestore/lite";
+import { auth, db } from "./Firebase";
 
 const Wallet = () => {
   const dispatch = useDispatch();
   const psi = useSelector((state) => state.psi);
   const oid = useSelector((state) => state.oid);
-  const balance = useSelector((state) => state.balance);
-  const [bal, setbal] = useState(balance);
-  useEffect(() => {
-    setbal(0);
-  }, []);
+  const [bal, setbal] = useState(0);
   const topup = useRef();
   const navigate = useNavigate();
-  const handlepayment = async () => {
-    if (topup.current.value == false)
-      return toast("Please Enter a valid amount.");
-    await fetch(`${baseurl}/api/order`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ topup: topup.current.value }),
-    })
-      .then(async (res) => {
-        const data1 = await res.json();
-        console.log(data1);
-        localStorage.setItem("oid", data1.order_id);
-        dispatch(changepayment({ psi: data1.psi, oid: data1.order_id }));
-        return data1.psi;
-      })
-      .then(async (res) => {
-        const cashfree = await loadCashfree();
 
-        let checkoutOptions = {
-          paymentSessionId: res,
-          returnUrl: "http://localhost:5173/wallet",
-        };
-        cashfree.checkout(checkoutOptions).then(function (result) {
-          if (result.error) {
-            alert(result.error.message);
-            navigate("/wallet");
-          }
-          if (result.redirect) {
-            console.log("Redirection");
-          }
-        });
-      })
-      /*.then(async()=>{
-     
-     await fetch(${baseurl}/api/paymentStatus,{
-      method:'POST',
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({oid:oid})
-     }).then(async(res)=>{
-      const data =  await res.json();
-      console.log(data.order_status);
-     }).catch((err)=>{
-       console.log(err);
-     })
-    })*/
-      .catch((error) => {
+  useEffect(() => {
+    auth.onAuthStateChanged((user)=>{
+      try {
+        const docRef = async() => {
+          const balancedoc = await getDoc(doc(db,'balance',user.uid));
+          return balancedoc.data();
+        }
+        docRef().then((res)=>{setbal(parseFloat(res.balance.toFixed(2)))});
+      }
+      catch (error) {
         console.log(error);
+      }  
+    })
+   
+      
+     
+  }, []);
+
+  const handlepayment = async () => {
+    if (!topup.current.value) {
+      return toast("Please Enter a valid amount.");
+    }
+
+    try {
+      const res = await fetch(`${baseurl}/api/order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ topup: topup.current.value }),
       });
+
+      const data1 = await res.json();
+      localStorage.setItem("oid", data1.order_id);
+      dispatch(changepayment({ psi: data1.psi, oid: data1.order_id }));
+
+      const cashfree = await loadCashfree();
+
+      let checkoutOptions = {
+        paymentSessionId: data1.psi,
+        returnUrl: "http://localhost:5173/wallet",
+      };
+
+      cashfree.checkout(checkoutOptions).then((result) => {
+        if (result.error) {
+          alert(result.error.message);
+          navigate("/wallet");
+        }
+      });
+    } catch (error) {
+      console.error("Error processing payment: ", error);
+    }
   };
+
   const handlevalidate = async () => {
     const oid = localStorage.getItem("oid");
-    await fetch(`${baseurl}/api/paymentStatus/${oid}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(async (res) => {
-        let data = await res.json();
-        console.log(data.order_data);
-        const total_balance = parseInt(bal) + data.order_data.order_amount;
-        localStorage.setItem('balances',total_balance);
-        if (data.order_data.order_status == "PAID") {
-          dispatch(changebalance({ balance: total_balance }));
-          localStorage.setItem("balances", total_balance);
-          setbal(total_balance);
-          toast("Payment is successful");
-        } else if (data.order_data.order_status == "ACTIVE") {
-          toast("Oops!! Payment failed.");
-        }
-        localStorage.setItem("oid", "");
-      })
-      .catch((error) => {
-        console.log(error);
+
+    try {
+      const res = await fetch(`${baseurl}/api/paymentStatus/${oid}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+
+      const data = await res.json();
+      const balanceDoc = await getDoc(doc(db, 'balance', auth.currentUser.uid));
+      const total_balance = balanceDoc.data().balance + data.order_data.order_amount;
+
+      if (data.order_data.order_status === "PAID") {
+        await setDoc(doc(db, 'balance', auth.currentUser.uid), {
+          balance: total_balance,
+        });
+        setbal(total_balance);
+        toast("Payment is successful");
+        localStorage.setItem("oid", "");
+      } else if (data.order_data.order_status === "ACTIVE") {
+        toast("Oops!! Payment failed.");
+      }
+
+      localStorage.setItem("oid", "");
+    } catch (error) {
+      console.error("Error validating payment: ", error);
+    }
   };
+
   return (
     <div className="flex justify-center items-center h-[100vh] w-[100vw] bg-white">
       <ToastContainer />
       <div className="md:h-[35vh] md:w-[30vw] h-[50vh] w-full bg-black text-white rounded-md text-left font-serif p-3">
-        <h1 className="text-center font-extrabold text-3xl underline">
-          My Wallet
-        </h1>
+        <h1 className="text-center font-extrabold text-3xl underline">My Wallet</h1>
         <h2 className="p-2">
           <span className="font-bold">Account Holder's Name</span> :Ayush
         </h2>
         <hr className="border-1 border-white"></hr>
         <h2 className="p-2">
-          <span className="font-bold">Balance</span> : {localStorage.getItem('balances')}
-        </h2>{" "}
+          <span className="font-bold">Balance</span> : {bal.toFixed(2)}
+        </h2>
         <hr className="border-1 border-white"></hr>
-        {/*  */}
         <div className="flex">
           <Link
             to={""}
@@ -134,13 +135,12 @@ const Wallet = () => {
           <div className="w-full md:w-[10vw] m-2">
             <input
               ref={topup}
-              className="flex h-12 w-full rounded-md bg-transparent px-3 py-2 text-sm placeholder:text-gray-600  disabled:cursor-not-allowed disabled:opacity-50 border-white border-2"
+              className="flex h-12 w-full rounded-md bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 disabled:cursor-not-allowed disabled:opacity-50 border-white border-2"
               type="text"
               placeholder="Amount"
             />
           </div>
         </div>
-        {/*  */}
       </div>
     </div>
   );

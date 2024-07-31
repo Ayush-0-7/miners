@@ -3,17 +3,23 @@ import { createPortal } from 'react-dom'
 import './Modal.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { IoCloseCircle } from "react-icons/io5";
-import { changebalance, isportal } from '../features/miners/MinerSlice';
+import {  isportal } from '../features/miners/MinerSlice';
+import { doc, getDoc, setDoc } from 'firebase/firestore/lite';
+import { auth, db } from './Firebase';
 const Modal = () => {
   const amount = useSelector(state=>state.amount)
   const bombs = useSelector(state=>state.bombs)
   const dispatch = useDispatch();
-  const balance = useSelector(state=>state.balance);
   const invest = useSelector(state=>state.investedAmount)
   const handleclick = async() => {
-    localStorage.setItem("balances",balance);
-    console.log(balance);
-    window.location.reload();
+    const docRef = await getDoc(doc(db,'balance',auth.currentUser.uid));
+    const balance = docRef.data().balance;
+    await setDoc(doc(db,'balance',auth.currentUser.uid),{
+      balance:balance+amount
+    }).then(()=>{
+      window.location.reload();
+    })
+    
   }
 
   return createPortal (

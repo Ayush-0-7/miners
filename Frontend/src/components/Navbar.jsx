@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaWallet } from "react-icons/fa";
 import { GiWarPick } from "react-icons/gi";
+import { auth } from './Firebase';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +10,15 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-
+  const handlelogout = async() => {
+    try {
+      await auth.signOut();
+      navigate('/signup');
+      console.log("User Logged Out sucessfully.");
+    } catch (error) {
+      console.log("Logout Failed !!");
+    }
+  }
   return (
     <div className="relative w-full bg-white">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
@@ -28,7 +37,7 @@ const Navbar = () => {
               <Link to='/about' className="text-sm font-semibold text-gray-800 hover:text-gray-900">About</Link>
             </li>
             <li>
-              <Link to='/contact' className="text-sm font-semibold text-gray-800 hover:text-gray-900">Contact</Link>
+              <button className="text-sm font-semibold text-gray-800 hover:text-gray-900" onClick={handlelogout}>LogOut</button>
             </li>
           </ul>
         </div>

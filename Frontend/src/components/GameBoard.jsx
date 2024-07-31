@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { RiVipDiamondFill } from "react-icons/ri";
 import { FaBomb } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
-import { changeAmount, changebalance, changeMultiplier, isportal } from '../features/miners/MinerSlice';
+import { changeAmount, changeMultiplier, isportal } from '../features/miners/MinerSlice';
 import Modal from './Modal';
 
 const GameBoard = () => {
@@ -16,7 +16,6 @@ const GameBoard = () => {
     const multipliers = useSelector(state=>state.multiplier);
     const [isportalopen,setisportalopen] = useState(false);
     const dispatch = useDispatch();
-    const balance = useSelector(state=>state.balance);
     const amount = useSelector(state=>state.amount);
 
     const bomb = () => {
@@ -46,7 +45,7 @@ const GameBoard = () => {
         let explode = new Audio('https://www.soundjay.com/mechanical/sounds/explosion-01.mp3');
         const temp= e.target.parentElement.parentElement;
         if(start == true)temp.className='opacity-100 pointer-events-none';
-        if(start == true)randomBomb.includes(parseInt(temp.id)) ? explode.play().catch((err)=>console.log('error playing')) && dispatch(changeAmount({amount:0})) && dispatch(isportal({isportal:true})) && dispatch(changebalance({balance:balance+0})): win();
+        if(start == true)randomBomb.includes(parseInt(temp.id)) ? explode.play().catch((err)=>console.log('error playing')) && dispatch(changeAmount({amount:0})) && dispatch(isportal({isportal:true})): win();
     }
     
 

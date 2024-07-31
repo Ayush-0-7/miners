@@ -8,12 +8,18 @@ import { createRoutesFromElements, Route, RouterProvider } from 'react-router'
 import { createBrowserRouter } from 'react-router-dom'
 import Wallet from './components/Wallet.jsx'
 import Layout from './features/Layout.jsx'
+import SignUp from './components/SignUp.jsx'
+import Login from './components/Login.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout/>}>
-      
-      <Route path='/' element={<App/>}/>
+      <Route path='' element={<Login/>}/>
+      <Route path='/home' element={<App/>}/>
       <Route path='/wallet' element={<Wallet/>}/>
+      <Route path='/signup' element={<SignUp/>}/>
+      <Route path='/login' element={<Login/>}/>
+
+
 
 
     </Route>
